@@ -22,4 +22,13 @@ public interface Queue {
      */
     boolean isRanked();
 
+    /**
+     * Get the name of the ladder the player is queued for.
+     * @return The ladder name, never null
+     * @since 2.4.0
+     */
+    default String getLadderName() {
+        throw new UnsupportedOperationException("Requires ZonePractice Pro with API 2.4.0+");
+    }
+
 }

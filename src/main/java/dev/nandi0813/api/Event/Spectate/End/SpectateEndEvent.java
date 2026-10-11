@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Subclasses have their own HandlerList; listen to the specific subclass (Match/FFA/Event) to receive them.
+ */
 @Getter
 public class SpectateEndEvent extends Event {
 

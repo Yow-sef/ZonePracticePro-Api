@@ -1,0 +1,19 @@
+package dev.nandi0813.api.Enum;
+
+/**
+ * The type of a match.
+ */
+public enum MatchType {
+
+    /** A 1v1 duel. */
+    DUEL,
+    /** A free-for-all between the members of one party. */
+    PARTY_FFA,
+    /** One party split into two teams. */
+    PARTY_SPLIT,
+    /** Two parties fighting each other. */
+    PARTY_VS_PARTY,
+    /** A match type added by a newer core version. */
+    UNKNOWN
+
+}
