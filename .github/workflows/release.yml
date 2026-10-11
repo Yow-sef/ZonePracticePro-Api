@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - build.gradle.kts
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read version
+        id: version
+        run: |
+          VERSION=$(sed -n 's/^version = "\(.*\)"$/\1/p' build.gradle.kts)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null; then
+            echo "Tag $VERSION already exists, skipping release."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-java@v4
+        if: steps.version.outputs.exists == 'false'
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - uses: gradle/actions/setup-gradle@v4
+        if: steps.version.outputs.exists == 'false'
+
+      - name: Build
+        if: steps.version.outputs.exists == 'false'
+        run: ./gradlew build
+
+      - name: Create release
+        if: steps.version.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          gh release create "$VERSION" build/libs/*.jar \
+            --target "$GITHUB_SHA" \
+            --title "$VERSION" \
+            --generate-notes
