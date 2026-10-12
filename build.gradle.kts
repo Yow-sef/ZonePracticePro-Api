@@ -22,6 +22,7 @@ dependencies {
 
 java {
     withSourcesJar()
+    withJavadocJar()
 }
 
 tasks.withType<JavaCompile>().configureEach {
@@ -30,16 +31,16 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 tasks.javadoc {
-    setDestinationDir(layout.buildDirectory.dir("javadoc-latest").get().asFile)
     (options as StandardJavadocDocletOptions).apply {
         encoding = "UTF-8"
         memberLevel = JavadocMemberLevel.PUBLIC
-        windowTitle = "ZPP"
+        windowTitle = "ZonePracticePro API $version"
+        docTitle = "ZonePracticePro API $version"
         isAuthor = true
         isVersion = true
         isLinkSource = true
         noTimestamp(true)
-        bottom("<b>Nandi0813, 2024</b>")
+        bottom("ZonePracticePro API $version · <a href=\"https://github.com/ZoneDevelopement/ZonePracticePro-Api\">GitHub</a>")
     }
 }
 
@@ -47,6 +48,11 @@ publishing {
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+            pom {
+                name = "ZonePracticePro API"
+                description = "API for ZonePractice Pro addons."
+                url = "https://github.com/ZoneDevelopement/ZonePracticePro-Api"
+            }
         }
     }
 }

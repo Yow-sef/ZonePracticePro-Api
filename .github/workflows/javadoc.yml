@@ -1,0 +1,65 @@
+name: Publish Javadoc
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version folder to publish (default: version in build.gradle.kts)"
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  javadoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version != '' && inputs.version || github.ref }}
+      - name: Resolve version
+        id: version
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          VERSION="$INPUT_VERSION"
+          if [ -z "$VERSION" ]; then
+            VERSION=$(sed -n 's/^version = "\(.*\)"$/\1/p' build.gradle.kts)
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build javadoc
+        run: ./gradlew javadoc
+      - name: Publish version folder
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/docs/javadoc
+          destination_dir: ${{ steps.version.outputs.version }}
+          keep_files: true
+      - name: Publish latest folder
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build/docs/javadoc
+          destination_dir: latest
+          keep_files: true
+      - name: Root redirect
+        run: |
+          mkdir -p site
+          printf '<!doctype html><meta http-equiv="refresh" content="0; url=latest/"><link rel="canonical" href="latest/">\n' > site/index.html
+      - uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: site
+          keep_files: true

@@ -2,24 +2,36 @@ name: Release
 
 on:
   push:
-    branches: [main, master]
+    branches: [master]
     paths:
       - build.gradle.kts
+  workflow_dispatch:
 
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   release:
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      released: ${{ steps.version.outputs.exists == 'false' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Read version
         id: version
         run: |
           VERSION=$(sed -n 's/^version = "\(.*\)"$/\1/p' build.gradle.kts)
+          API_LEVEL=$(sed -n 's/.*API_VERSION = \([0-9]*\);.*/\1/p' src/main/java/dev/nandi0813/api/ZonePracticeApi.java)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "api_level=$API_LEVEL" >> "$GITHUB_OUTPUT"
           if git ls-remote --exit-code --tags origin "refs/tags/$VERSION" > /dev/null; then
             echo "Tag $VERSION already exists, skipping release."
             echo "exists=true" >> "$GITHUB_OUTPUT"
@@ -40,6 +52,44 @@ jobs:
         if: steps.version.outputs.exists == 'false'
         run: ./gradlew build
 
+      - name: Generate release notes
+        if: steps.version.outputs.exists == 'false'
+        id: cliff
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --unreleased --tag ${{ steps.version.outputs.version }} --strip header
+        env:
+          OUTPUT: CHANGES.md
+
+      - name: Compose release body
+        if: steps.version.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          API_LEVEL: ${{ steps.version.outputs.api_level }}
+        run: |
+          {
+            cat CHANGES.md
+            echo
+            echo "## Installation"
+            echo
+            echo "Requires ZonePractice Pro with API level \`$API_LEVEL\` (\`ZonePracticeApi.API_VERSION >= $API_LEVEL\`)."
+            echo
+            echo '**Gradle (Kotlin)**'
+            echo '```kotlin'
+            echo 'repositories { maven("https://jitpack.io") }'
+            echo "dependencies { compileOnly(\"com.github.ZoneDevelopement:ZonePracticePro-Api:$VERSION\") }"
+            echo '```'
+            echo
+            echo '**Maven**'
+            echo '```xml'
+            echo '<repository><id>jitpack.io</id><url>https://jitpack.io</url></repository>'
+            echo "<dependency><groupId>com.github.ZoneDevelopement</groupId><artifactId>ZonePracticePro-Api</artifactId><version>$VERSION</version><scope>provided</scope></dependency>"
+            echo '```'
+            echo
+            echo "📖 [Developer docs](https://zone-developement.gitbook.io/zonepractice-pro/extra/for-developers) · 📚 [Javadoc](https://zonedevelopement.github.io/ZonePracticePro-Api/$VERSION/)"
+          } > RELEASE_NOTES.md
+
       - name: Create release
         if: steps.version.outputs.exists == 'false'
         env:
@@ -48,5 +98,49 @@ jobs:
         run: |
           gh release create "$VERSION" build/libs/*.jar \
             --target "$GITHUB_SHA" \
-            --title "$VERSION" \
-            --generate-notes
+            --title "ZonePracticePro API $VERSION" \
+            --notes-file RELEASE_NOTES.md
+
+      - name: Update CHANGELOG.md
+        if: steps.version.outputs.exists == 'false'
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: --tag ${{ steps.version.outputs.version }}
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Commit CHANGELOG.md
+        if: steps.version.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md
+          git commit -m "docs(changelog): ZonePracticePro API $VERSION [skip ci]" || exit 0
+          git push origin HEAD:master
+
+      - name: Build on JitPack
+        if: steps.version.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          URL="https://jitpack.io/com/github/ZoneDevelopement/ZonePracticePro-Api/$VERSION/ZonePracticePro-Api-$VERSION.pom"
+          for attempt in 1 2 3; do
+            if curl -sSf --max-time 900 "$URL" > /dev/null; then
+              echo "JitPack build OK"
+              exit 0
+            fi
+            echo "JitPack attempt $attempt failed, retrying in 30s"
+            sleep 30
+          done
+          echo "::error::JitPack build failed: https://jitpack.io/#ZoneDevelopement/ZonePracticePro-Api/$VERSION"
+          exit 1
+
+  javadoc:
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    uses: ./.github/workflows/javadoc.yml
+    with:
+      version: ${{ needs.release.outputs.version }}
