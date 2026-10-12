@@ -1,28 +1,54 @@
-# ZonePracticePro-Api
+# ZonePracticePro API
 
-API for addons of the ZonePractice Pro plugin.
+Public API for addons of the ZonePractice Pro plugin: interfaces, enums and events, without internal plugin classes.
 
-## 2.4.0
+[![JitPack](https://jitpack.io/v/ZoneDevelopement/ZonePracticePro-Api.svg)](https://jitpack.io/#ZoneDevelopement/ZonePracticePro-Api) [![Build](https://github.com/ZoneDevelopement/ZonePracticePro-Api/actions/workflows/build.yml/badge.svg)](https://github.com/ZoneDevelopement/ZonePracticePro-Api/actions/workflows/build.yml)
 
-New in 2.4.0 (`ZonePracticeApi.API_VERSION = 3`):
+- [Developer docs](https://zone-developement.gitbook.io/zonepractice-pro/extra/for-developers)
+- [Javadoc (latest)](https://zonedevelopement.github.io/ZonePracticePro-Api/latest/)
+- [Changelog](CHANGELOG.md)
 
-- Player state lookup (`getPlayerState`) and `PlayerStateChangeEvent`.
-- Lookups for the match, spectated match, FFA, event, party and queue of a player.
-- Ladder names, ladder kills and ladder deaths.
-- `FightDeathEvent`, `KitAppliedEvent`, `EloChangeEvent`, `HotbarApplyEvent` and `ZonePracticeReadyEvent`.
-- Addon cosmetics categories (`CosmeticsRegistry`) and addon hotbar items (`HotbarItemRegistry`).
+## Installation
 
-All new events are synchronous (main thread) and not cancellable.
+Gradle (Kotlin):
 
-### Feature detection
+```kotlin
+repositories {
+    maven("https://jitpack.io")
+}
 
-```java
-if (ZonePracticeApi.isAvailable() && ZonePracticeApi.API_VERSION >= 3) {
-    // 2.4.0 features are available
+dependencies {
+    compileOnly("com.github.ZoneDevelopement:ZonePracticePro-Api:2.4.0")
 }
 ```
 
-### Addon example
+Maven:
+
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependencies>
+  <dependency>
+    <groupId>com.github.ZoneDevelopement</groupId>
+    <artifactId>ZonePracticePro-Api</artifactId>
+    <version>2.4.0</version>
+    <scope>provided</scope>
+  </dependency>
+</dependencies>
+```
+
+Add the dependency to `plugin.yml`:
+
+```yaml
+depend: [ZonePracticePro]
+```
+
+## Quick start
 
 ```java
 public final class MyAddon extends JavaPlugin implements Listener {
@@ -30,58 +56,10 @@ public final class MyAddon extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         if (!ZonePracticeApi.isAvailable() || ZonePracticeApi.API_VERSION < 3) {
-            getLogger().warning("ZonePractice Pro with API 2.4.0+ is required.");
+            getLogger().warning("ZonePractice Pro 2.4.0+ is required.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
-        ZonePracticeApi api = ZonePracticeApi.getInstance();
-
-        // A button in the cosmetics hub.
-        api.getCosmeticsRegistry().register(this, new CosmeticCategory() {
-            @Override
-            public String getId() {
-                return "myaddon_pets";
-            }
-
-            @Override
-            public ItemStack getIcon(Player player) {
-                return player.hasPermission("myaddon.pets") ? new ItemStack(Material.BONE) : null;
-            }
-
-            @Override
-            public void onClick(Player player) {
-                player.sendMessage("Opening pets...");
-            }
-        });
-
-        // An item in slot 4 of the lobby hotbar.
-        api.getHotbarItemRegistry().register(this, new HotbarItem() {
-            @Override
-            public String getId() {
-                return "myaddon_stats";
-            }
-
-            @Override
-            public HotbarLayout getLayout() {
-                return HotbarLayout.LOBBY;
-            }
-
-            @Override
-            public int getSlot() {
-                return 4;
-            }
-
-            @Override
-            public ItemStack getItem(Player player) {
-                return new ItemStack(Material.BOOK);
-            }
-
-            @Override
-            public void onUse(Player player) {
-                player.sendMessage("Your stats...");
-            }
-        });
-
         getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -96,4 +74,14 @@ public final class MyAddon extends JavaPlugin implements Listener {
 }
 ```
 
-Registered categories and items are removed automatically when your plugin is disabled.
+Use `ZonePracticeApi.getInstance()` to call the API, for example `ZonePracticeApi.getInstance().getPlayerState(player)`.
+
+## Releasing
+
+For maintainers:
+
+1. Write commits with Conventional Commits (`feat:`, `fix:`, `docs:`, ...). They become the changelog.
+2. Bump `version` in `build.gradle.kts`, and `ZonePracticeApi.API_VERSION` for additive changes. Push to `master`.
+3. The Release workflow tags the version, publishes the GitHub release "ZonePracticePro API x.y.z" with the notes and jars, updates `CHANGELOG.md`, verifies the JitPack build and publishes the javadoc.
+
+To run the release again, open Actions, choose Release and click Run workflow.
