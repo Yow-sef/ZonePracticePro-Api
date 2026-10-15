@@ -3,6 +3,11 @@
 All notable changes to the ZonePracticePro API.
 
 
+## 2.5.1 - 2026-10-15
+
+### 🔧 Build
+- Use Maven Central mirrors and release 2.5.1 ([`818ac06`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/818ac06ab0b71bf62bca479adf8283bb1f015d36))
+
 ## 2.5.0 - 2026-10-15
 
 ### ✨ New Features
