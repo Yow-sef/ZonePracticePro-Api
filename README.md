@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.github.ZoneDevelopement:ZonePracticePro-Api:2.4.0")
+    compileOnly("com.github.ZoneDevelopement:ZonePracticePro-Api:2.5.0")
 }
 ```
 
@@ -36,7 +36,7 @@ Maven:
   <dependency>
     <groupId>com.github.ZoneDevelopement</groupId>
     <artifactId>ZonePracticePro-Api</artifactId>
-    <version>2.4.0</version>
+    <version>2.5.0</version>
     <scope>provided</scope>
   </dependency>
 </dependencies>
@@ -55,8 +55,8 @@ public final class MyAddon extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        if (!ZonePracticeApi.isAvailable() || ZonePracticeApi.API_VERSION < 3) {
-            getLogger().warning("ZonePractice Pro 2.4.0+ is required.");
+        if (!ZonePracticeApi.isAvailable() || ZonePracticeApi.API_VERSION < 4) {
+            getLogger().warning("ZonePractice Pro 2.5.0+ is required.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
