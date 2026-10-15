@@ -85,3 +85,8 @@ For maintainers:
 3. The Release workflow tags the version, publishes the GitHub release "ZonePracticePro API x.y.z" with the notes and jars, updates `CHANGELOG.md`, verifies the JitPack build and publishes the javadoc.
 
 To run the release again, open Actions, choose Release and click Run workflow.
+
+## License
+
+Source-available. Copyright © **2026 Nandor Dukat**. All rights reserved.  
+You may use it on your own servers, modify it for your own private use, and contribute changes to the official repository. You may not redistribute it or publish forks without the author's prior written permission. See [LICENSE](LICENSE).
