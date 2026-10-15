@@ -3,6 +3,20 @@
 All notable changes to the ZonePracticePro API.
 
 
+## 2.5.0 - 2026-10-15
+
+### ✨ New Features
+- Add name decoration registry and stat getters ([`a8105b1`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/a8105b1b62f74acb1292deebbb6e3448270f6ef5))
+
+### 📖 Documentation
+- Rewrite README and add changelog ([`fab91cf`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/fab91cfbc676b719142b8a2c2ea26de2d634cc5d))
+
+### 🔧 Build
+- Improve releases with changelog, javadoc and JitPack check ([`03ec87b`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/03ec87b6a527f76bfdfadc5224d6e1b98d979bb3))
+
+### 🧩 Other Changes
+- Stop tracking IntelliJ .idea files ([`929f6bb`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/929f6bbb1a64d9306bb636c18207b971e00c0ef3))
+
 ## 2.4.0 - 2026-10-11
 
 ### ✨ New Features
