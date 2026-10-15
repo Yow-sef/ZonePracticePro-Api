@@ -3,6 +3,14 @@
 All notable changes to the ZonePracticePro API.
 
 
+## 2.6.0 - 2026-10-15
+
+### ✨ New Features
+- Expose round end inventories and match lookup by id ([`31a1dc9`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/31a1dc9262d3fdb18933619471aec559b36a48fa))
+
+### 📖 Documentation
+- Clarify the API version check message ([`401408a`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/401408a473c1ac1f016d65c0d3e9bacd04fe00ea))
+
 ## 2.5.1 - 2026-10-15
 
 ### 🔧 Build
