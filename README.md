@@ -8,6 +8,11 @@ Public API for addons of the ZonePractice Pro plugin: interfaces, enums and even
 - [Javadoc (latest)](https://zonedevelopement.github.io/ZonePracticePro-Api/latest/)
 - [Changelog](CHANGELOG.md)
 
+## Requirements
+
+- Java 25
+- Paper 1.21.11 or newer, with ZonePractice Pro installed
+
 ## Installation
 
 Gradle (Kotlin):

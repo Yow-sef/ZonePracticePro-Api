@@ -12,25 +12,24 @@ repositories {
     maven("https://maven-central.storage-download.googleapis.com/maven2/")
     maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
-    maven("https://hub.spigotmc.org/nexus/content/groups/public/")
 }
 
 dependencies {
-    compileOnly("org.bukkit:bukkit:1.13.1-R0.1-SNAPSHOT")
-    compileOnly("net.kyori:adventure-api:4.26.1")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     compileOnly("org.projectlombok:lombok:1.18.46")
     annotationProcessor("org.projectlombok:lombok:1.18.46")
 }
 
 java {
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
     withSourcesJar()
     withJavadocJar()
 }
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
-    options.release = 8
+    options.release = 25
 }
 
 tasks.javadoc {
