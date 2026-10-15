@@ -20,9 +20,9 @@ public abstract class ZonePracticeApi
 {
 
     /**
-     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4.
+     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5.
      */
-    public static final int API_VERSION = 4;
+    public static final int API_VERSION = 5;
 
     /**
      * Use {@link #getInstance()}. Kept for binary compatibility; set by the core plugin only.
@@ -172,6 +172,14 @@ public abstract class ZonePracticeApi
      * @return The spectated match, or null if the player is not spectating a match
      */
     public abstract Match getSpectatingMatch(Player player);
+
+    /**
+     * Get a match by its id, including matches that already ended. Main thread only.
+     * @param matchId The match id, see {@link Match#getMatchId()}
+     * @return The match, or null if no match has this id
+     * @since 2.6.0
+     */
+    public abstract Match getMatchById(String matchId);
 
     /**
      * Get the FFA the player fights in. Main thread only.

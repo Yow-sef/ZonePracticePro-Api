@@ -4,6 +4,7 @@ import dev.nandi0813.api.Enum.MatchType;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface Match extends Spectatable {
 
@@ -89,6 +90,37 @@ public interface Match extends Spectatable {
      */
     default int getCurrentRoundNumber() {
         throw new UnsupportedOperationException("Requires ZonePractice Pro with API 2.4.0+");
+    }
+
+    /**
+     * Get the inventory snapshots of every player in every finished round. Main thread only.
+     * Snapshots of a round are available from MatchRoundEndEvent of that round, and all of them from MatchEndEvent.
+     * @return An unmodifiable list sorted by round number, never null. Players offline at round end are missing.
+     * @since 2.6.0
+     */
+    default List<RoundInventory> getRoundInventories() {
+        throw new UnsupportedOperationException("Requires ZonePractice Pro with API 2.6.0+");
+    }
+
+    /**
+     * Get the inventory snapshots of one player in every finished round. Main thread only.
+     * @param player The player's unique id
+     * @return An unmodifiable list sorted by round number, never null
+     * @since 2.6.0
+     */
+    default List<RoundInventory> getRoundInventories(UUID player) {
+        throw new UnsupportedOperationException("Requires ZonePractice Pro with API 2.6.0+");
+    }
+
+    /**
+     * Get the inventory snapshot of one player in one round. Main thread only.
+     * @param player The player's unique id
+     * @param round The round number, 1-based
+     * @return The snapshot, or null if none was saved for that player and round
+     * @since 2.6.0
+     */
+    default RoundInventory getRoundInventory(UUID player, int round) {
+        throw new UnsupportedOperationException("Requires ZonePractice Pro with API 2.6.0+");
     }
 
 }
