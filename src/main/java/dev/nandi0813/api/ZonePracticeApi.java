@@ -4,6 +4,7 @@ import dev.nandi0813.api.Enum.DivisionName;
 import dev.nandi0813.api.Enum.LeaderboardType;
 import dev.nandi0813.api.Enum.PlayerState;
 import dev.nandi0813.api.Enum.WeightClass;
+import dev.nandi0813.api.Interface.BotRegistry;
 import dev.nandi0813.api.Interface.CosmeticsRegistry;
 import dev.nandi0813.api.Interface.FFA;
 import dev.nandi0813.api.Interface.HotbarItemRegistry;
@@ -21,9 +22,9 @@ public abstract class ZonePracticeApi
 {
 
     /**
-     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5, 2.7.0 = 6.
+     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5, 2.7.0 = 6, 2.8.0 = 7.
      */
-    public static final int API_VERSION = 6;
+    public static final int API_VERSION = 7;
 
     /**
      * Use {@link #getInstance()}. Kept for binary compatibility; set by the core plugin only.
@@ -472,5 +473,12 @@ public abstract class ZonePracticeApi
      * @since 2.7.0
      */
     public abstract int getDivisionRequiredWins(String division);
+
+    /**
+     * Get the registry that connects a bot addon to ZonePractice Pro.
+     * @return The bot registry, never null
+     * @since 2.8.0
+     */
+    public abstract BotRegistry getBotRegistry();
 
 }
