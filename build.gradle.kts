@@ -4,10 +4,13 @@ plugins {
 }
 
 group = "dev.nandi0813"
-version = "2.5.0"
+version = "2.5.1"
 description = "ZonePracticePro Api"
 
 repositories {
+    // Maven Central mirrors first: JitPack builds get rate limited (HTTP 429) by repo.maven.apache.org.
+    maven("https://maven-central.storage-download.googleapis.com/maven2/")
+    maven("https://repo.papermc.io/repository/maven-public/")
     mavenCentral()
     maven("https://hub.spigotmc.org/nexus/content/groups/public/")
 }
