@@ -56,7 +56,7 @@ public final class MyAddon extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         if (!ZonePracticeApi.isAvailable() || ZonePracticeApi.API_VERSION < 4) {
-            getLogger().warning("ZonePractice Pro 2.5.0+ is required.");
+            getLogger().warning("A ZonePractice Pro version with API 2.5.0+ is required.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
