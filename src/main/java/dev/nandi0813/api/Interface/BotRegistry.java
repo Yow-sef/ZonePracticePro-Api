@@ -45,16 +45,18 @@ public interface BotRegistry {
 
     /**
      * Open the bot practice ladder, arena and round selection. The match starts with {@code options}.
+     * If bot practice is unavailable or the player is busy, the player is told why instead.
      * @param player The player
      * @param options The bot options chosen by the player
      */
     void openSetup(Player player, BotOptions options);
 
     /**
-     * Start a bot practice match.
+     * Start a bot practice match. If it cannot start, the player is told why.
      * @param player The player
      * @param setup The ladder, arena, rounds and bot options
-     * @return null on success, otherwise an error key: UNAVAILABLE, INVALID-SETUP, BUSY, CAPACITY, NO-ARENA or FAILED
+     * @return null on success, otherwise an error key, for example UNAVAILABLE, INVALID-SETUP, BUSY, CAPACITY,
+     *         NO-ARENA or FAILED
      */
     String start(Player player, BotSetup setup);
 

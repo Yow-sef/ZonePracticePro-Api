@@ -35,7 +35,9 @@ public interface BotProvider {
 
     /**
      * Command without the slash that lets a player choose new options, e.g. "botpractice".
-     * @return The command, never null
+     * The result message after a bot match offers it, and offers it with the argument {@code rematch},
+     * which should start {@link BotRegistry#getLastSetup(org.bukkit.entity.Player)} again.
+     * @return The command, never null; lowercase letters, digits, underscores and hyphens, at most 32 characters
      */
     String getSetupCommand();
 
