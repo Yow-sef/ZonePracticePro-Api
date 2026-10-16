@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 
 /**
- * Read-only state of a live bot practice round, passed to {@link BotOpponent#tick(BotFightView)}.
+ * Read-only state of a bot practice round in its start countdown or live, passed to {@link BotOpponent#tick(BotFightView)}.
  * Only valid during that call; do not keep a reference.
  */
 public interface BotFightView {
@@ -25,9 +25,15 @@ public interface BotFightView {
     int getRoundNumber();
 
     /**
-     * @return Ticks since this round became live, starting at 0
+     * @return Ticks since this round became live, starting at 0; 0 during the countdown
      */
     int getRoundTicks();
+
+    /**
+     * @return True while the round is live. False during the start countdown, when the body must not move, attack
+     * or shoot, but may eat and use potions
+     */
+    boolean isLive();
 
     /**
      * @return A copy of the arena bounds

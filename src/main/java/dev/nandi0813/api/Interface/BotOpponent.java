@@ -15,7 +15,7 @@ public interface BotOpponent {
     Player getPlayer();
 
     /**
-     * Run one tick of bot behavior. Called once per server tick while the round is live, and never otherwise.
+     * Run one tick of bot behavior. Called once per server tick during the start countdown and while the round is live (see {@link BotFightView#isLive()}), and never otherwise.
      * Throwing an exception ends the match.
      * @param view The current round state
      */
@@ -23,7 +23,7 @@ public interface BotOpponent {
 
     /**
      * Stop all inputs and item use, keeping the current momentum.
-     * Called during the countdown, at round end and after a death.
+     * Called at round end and after a death.
      */
     void pause();
 
