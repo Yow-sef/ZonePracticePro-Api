@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.nandi0813"
-version = "2.6.0"
+version = "2.7.0"
 description = "ZonePracticePro Api"
 
 repositories {

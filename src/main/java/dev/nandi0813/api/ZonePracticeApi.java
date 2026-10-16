@@ -13,6 +13,7 @@ import dev.nandi0813.api.Interface.Party;
 import dev.nandi0813.api.Interface.Queue;
 import dev.nandi0813.api.Utilities.PlayerNametag;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -20,9 +21,9 @@ public abstract class ZonePracticeApi
 {
 
     /**
-     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5.
+     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5, 2.7.0 = 6.
      */
-    public static final int API_VERSION = 5;
+    public static final int API_VERSION = 6;
 
     /**
      * Use {@link #getInstance()}. Kept for binary compatibility; set by the core plugin only.
@@ -338,5 +339,138 @@ public abstract class ZonePracticeApi
      *         or the ladder name is unknown. Leaderboards hold the top entries only and refresh periodically.
      */
     public abstract int getLeaderboardPosition(Player player, LeaderboardType type, String ladder);
+
+    /**
+     * Queue the player for a ladder, like the queue menu does. The player gets the usual queue messages.
+     * Already queued for the ladder: nothing changes. Main thread only.
+     * @param player The player
+     * @param ladder The ladder name
+     * @param ranked true for the ranked queue, false for unranked
+     * @param keepInventoryOpen Keep the player's open inventory open, only applies with multi-queue
+     * @return true if the player is queued for the ladder or a match started right away; false if the player has
+     *         no loaded profile, is not in the lobby or a queue, is in staff mode or a party, the ladder is unknown,
+     *         disabled, frozen or unranked-only for a ranked queue, or a queue requirement failed
+     * @since 2.7.0
+     */
+    public abstract boolean queuePlayer(Player player, String ladder, boolean ranked, boolean keepInventoryOpen);
+
+    /**
+     * Remove a ladder from the player's queue. The queue ends when it was the last ladder.
+     * Does nothing if the player is not queued for the ladder. Main thread only.
+     * @param player The player
+     * @param ladder The ladder name
+     * @since 2.7.0
+     */
+    public abstract void leaveQueue(Player player, String ladder);
+
+    /**
+     * End the player's queue for every ladder. Does nothing if the player is not queued. Main thread only.
+     * @param player The player
+     * @since 2.7.0
+     */
+    public abstract void leaveAllQueues(Player player);
+
+    /**
+     * Check whether the player may queue for several ladders at once. Main thread only.
+     * @param player The player
+     * @return true if multi-queue is enabled in the config and the player has its permission
+     * @since 2.7.0
+     */
+    public abstract boolean isMultiQueueAllowed(Player player);
+
+    /**
+     * Get the names of the ladders the player is queued for. Main thread only.
+     * @param player The player
+     * @return An unmodifiable list of ladder names, empty if the player is not queued, never null
+     * @since 2.7.0
+     */
+    public abstract List<String> getQueuedLadderNames(Player player);
+
+    /**
+     * Check whether the player is queued for a ladder. Main thread only.
+     * @param player The player
+     * @param ladder The ladder name
+     * @return true if the player is queued for the ladder
+     * @since 2.7.0
+     */
+    public abstract boolean isQueued(Player player, String ladder);
+
+    /**
+     * Get the number of players queued for a ladder in one queue type. Main thread only.
+     * @param ladder The ladder name
+     * @param ranked true for the ranked queue, false for unranked
+     * @return The number of queued players, or -1 if the ladder name is unknown
+     * @since 2.7.0
+     */
+    public abstract int getQueuePlayerCount(String ladder, boolean ranked);
+
+    /**
+     * Get the number of players queued for a ladder, ranked and unranked together. Main thread only.
+     * @param ladder The ladder name
+     * @return The number of queued players, or -1 if the ladder name is unknown
+     * @since 2.7.0
+     */
+    public abstract int getQueuePlayerCount(String ladder);
+
+    /**
+     * Get the icon of a ladder. Main thread only.
+     * @param ladder The ladder name
+     * @return A copy of the ladder icon, or null if the ladder name is unknown or the ladder has no icon
+     * @since 2.7.0
+     */
+    public abstract ItemStack getLadderIcon(String ladder);
+
+    /**
+     * Get the display name of a ladder. Main thread only.
+     * @param ladder The ladder name
+     * @return The display name in MiniMessage format, or null if the ladder name is unknown
+     * @since 2.7.0
+     */
+    public abstract String getLadderDisplayName(String ladder);
+
+    /**
+     * Get the player's progress towards the next division, the same value the division menu shows. Main thread only.
+     * @param player The player
+     * @return The progress from 0 to 100, 100 if the player is in the highest division, or -1 if the player has no
+     *         loaded profile or no divisions exist
+     * @since 2.7.0
+     */
+    public abstract double getPlayerDivisionProgress(Player player);
+
+    /**
+     * Get the division after the player's current division. Main thread only.
+     * @param player The player
+     * @param divisionName Short or Full name of the division
+     * @return The next division's name, or null if the player has no loaded profile or is in the highest division
+     * @since 2.7.0
+     */
+    public abstract String getPlayerNextDivision(Player player, DivisionName divisionName);
+
+    /**
+     * Get the global elo a division requires. Main thread only.
+     * @param division The division's key in divisions.yml, or its short or full name as returned by
+     *                 {@link #getDivisionNames(DivisionName)}
+     * @return The required elo, or -1 if the division is unknown
+     * @since 2.7.0
+     */
+    public abstract int getDivisionRequiredElo(String division);
+
+    /**
+     * Get the global experience a division requires. Main thread only.
+     * @param division The division's key in divisions.yml, or its short or full name as returned by
+     *                 {@link #getDivisionNames(DivisionName)}
+     * @return The required experience, or -1 if the division is unknown
+     * @since 2.7.0
+     */
+    public abstract int getDivisionRequiredExperience(String division);
+
+    /**
+     * Get the global wins a division requires. Main thread only.
+     * @param division The division's key in divisions.yml, or its short or full name as returned by
+     *                 {@link #getDivisionNames(DivisionName)}
+     * @return The required wins, or -1 if the division is unknown
+     * @since 2.7.0
+     */
+    public abstract int getDivisionRequiredWins(String division);
 
 }
