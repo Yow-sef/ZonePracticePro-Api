@@ -3,6 +3,17 @@
 All notable changes to the ZonePracticePro API.
 
 
+## 2.7.0 - 2026-10-16
+
+### ✨ New Features
+- Add queue control, ladder info and division progress methods ([`c932e19`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/c932e1904d7841c1c19a1d037c2167eee961bf36))
+
+### 📖 Documentation
+- **license:** Allow own use and contributions only ([`411298f`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/411298f8a1b7d45bb744e80e8c6c81ce868dabb9))
+
+### 🧩 Other Changes
+- Ignore IDE bin output ([`f26d0d4`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/f26d0d4ef5b57d024a2bdf82bd81d952b3984b5e))
+
 ## 2.6.0 - 2026-10-15
 
 ### ✨ New Features
