@@ -1,6 +1,7 @@
 package dev.nandi0813.api.Interface;
 
 import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -40,6 +41,13 @@ public interface BotProvider {
      * @return The command, never null; lowercase letters, digits, underscores and hyphens, at most 32 characters
      */
     String getSetupCommand();
+
+    /**
+     * Whether bots can fight with this kit item. A ladder whose kit holds an unsupported item cannot host bot matches.
+     * @param item A non-air kit item, a copy the provider may inspect but not keep
+     * @return true if the bot can use the item
+     */
+    boolean isSupportedItem(ItemStack item);
 
     /**
      * Spawn a paused bot body. The core has already reserved {@code entityId} as a bot identity.
