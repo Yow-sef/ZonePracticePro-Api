@@ -9,8 +9,11 @@ import java.util.Objects;
  * @param arenaName The arena name, or null for an automatically chosen arena
  * @param winsNeeded Rounds needed to win the match, 1-10
  * @param options The bot options, never null
+ * @param teamSize Fighters per team, 1-4. The human team is the player (or their party) plus bots; the bot team has this many bots
  */
-public record BotSetup(String ladderName, String arenaName, int winsNeeded, BotOptions options) {
+public record BotSetup(String ladderName, String arenaName, int winsNeeded, BotOptions options, int teamSize) {
+
+    public static final int MAX_TEAM_SIZE = 4;
 
     public BotSetup {
         Objects.requireNonNull(ladderName, "ladderName");
@@ -18,6 +21,11 @@ public record BotSetup(String ladderName, String arenaName, int winsNeeded, BotO
         if (winsNeeded < 1 || winsNeeded > 10) {
             throw new IllegalArgumentException("winsNeeded must be between 1 and 10");
         }
+        if (teamSize < 1 || teamSize > MAX_TEAM_SIZE) throw new IllegalArgumentException("teamSize must be between 1 and " + MAX_TEAM_SIZE);
+    }
+
+    public BotSetup(String ladderName, String arenaName, int winsNeeded, BotOptions options) {
+        this(ladderName, arenaName, winsNeeded, options, 1);
     }
 
 }

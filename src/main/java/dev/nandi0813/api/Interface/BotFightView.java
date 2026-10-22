@@ -1,18 +1,29 @@
 package dev.nandi0813.api.Interface;
 
+import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 
 /**
- * Read-only state of a bot practice round in its start countdown or live, passed to {@link BotOpponent#tick(BotFightView)}.
- * Only valid during that call; do not keep a reference.
+ * Read-only state of a bot practice round as one bot sees it, passed to {@link BotOpponent#tick(BotFightView)}.
+ * Each bot receives its own view. Only valid during that call; do not keep a reference.
  */
 public interface BotFightView {
 
     /**
-     * @return The human player the bot fights, never null
+     * @return The team of the bot this view belongs to: 0 is the human team, 1 the bot team
      */
-    Player getOpponent();
+    int getTeam();
+
+    /**
+     * @return Living enemy fighters of this round, humans and bots, in a stable order. A new unmodifiable list; empty when none
+     */
+    List<Player> getEnemies();
+
+    /**
+     * @return Living teammates of this round, humans and bots, excluding the bot itself. A new unmodifiable list; empty when none
+     */
+    List<Player> getAllies();
 
     /**
      * @return The match id, see {@link Match#getMatchId()}
