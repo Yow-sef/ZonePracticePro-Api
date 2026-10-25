@@ -28,6 +28,14 @@ public interface BotOpponent {
     void pause();
 
     /**
+     * Run one tick of physics with no input while the bot is not fighting (round end).
+     * Called once per server tick instead of {@link #tick(BotFightView)}. Defaults to {@link #pause()}.
+     */
+    default void idle() {
+        pause();
+    }
+
+    /**
      * Show the body to a fighter or spectator.
      * @param viewer The viewer
      */
