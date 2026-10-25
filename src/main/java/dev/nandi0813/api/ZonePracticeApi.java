@@ -8,6 +8,7 @@ import dev.nandi0813.api.Interface.BotRegistry;
 import dev.nandi0813.api.Interface.CosmeticsRegistry;
 import dev.nandi0813.api.Interface.FFA;
 import dev.nandi0813.api.Interface.HotbarItemRegistry;
+import dev.nandi0813.api.Interface.LeaderboardEntry;
 import dev.nandi0813.api.Interface.Match;
 import dev.nandi0813.api.Interface.NameDecorationRegistry;
 import dev.nandi0813.api.Interface.Party;
@@ -22,9 +23,10 @@ public abstract class ZonePracticeApi
 {
 
     /**
-     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5, 2.7.0 = 6, 2.8.0 = 7.
+     * Incremented on every additive API release. 2.4.0 = 3, 2.5.0 = 4, 2.6.0 = 5, 2.7.0 = 6, 2.8.0 = 7,
+     * 2.9.0 = 8.
      */
-    public static final int API_VERSION = 7;
+    public static final int API_VERSION = 8;
 
     /**
      * Use {@link #getInstance()}. Kept for binary compatibility; set by the core plugin only.
@@ -340,6 +342,28 @@ public abstract class ZonePracticeApi
      *         or the ladder name is unknown. Leaderboards hold the top entries only and refresh periodically.
      */
     public abstract int getLeaderboardPosition(Player player, LeaderboardType type, String ladder);
+
+    /**
+     * Get the current top entries of a leaderboard. Main thread only.
+     * The returned list is a snapshot of the core's cached board, ordered by rank. It may refresh periodically.
+     * @param type The statistic the leaderboard is ranked by
+     * @param ladder The ladder name, or null for the global leaderboard
+     * @param limit The maximum number of entries, clamped to 1-100
+     * @return An unmodifiable list ordered by rank, never null. Empty if the leaderboard does not exist or has no entries.
+     * @since 2.9.0
+     */
+    public abstract List<LeaderboardEntry> getLeaderboardEntries(LeaderboardType type, String ladder, int limit);
+
+    /**
+     * Get the player's entry on a leaderboard, including the score. Main thread only.
+     * @param player The player
+     * @param type The statistic the leaderboard is ranked by
+     * @param ladder The ladder name, or null for the global leaderboard
+     * @return The player's entry, or null if the player is not on the leaderboard, the leaderboard does not exist,
+     *         or the ladder name is unknown. Leaderboards hold the top entries only and refresh periodically.
+     * @since 2.9.0
+     */
+    public abstract LeaderboardEntry getLeaderboardEntry(Player player, LeaderboardType type, String ladder);
 
     /**
      * Queue the player for a ladder, like the queue menu does. The player gets the usual queue messages.
