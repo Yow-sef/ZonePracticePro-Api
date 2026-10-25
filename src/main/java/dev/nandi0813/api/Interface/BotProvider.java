@@ -59,4 +59,44 @@ public interface BotProvider {
      */
     BotOpponent spawn(UUID entityId, Location location, BotOptions options);
 
+    /**
+     * Limits the host applies; providers usually read them from their own config.
+     * @return The number of bot matches that may run at the same time, 1-64
+     */
+    default int getMaxActiveMatches() {
+        return 16;
+    }
+
+    /**
+     * Limits the host applies; providers usually read them from their own config.
+     * @return The number of bots alive on the whole server at once, 1-256
+     */
+    default int getMaxTotalBots() {
+        return 32;
+    }
+
+    /**
+     * Limits the host applies; providers usually read them from their own config.
+     * @return The number of bots in one match, 1 to {@code 2 * BotSetup.MAX_TEAM_SIZE - 1}
+     */
+    default int getMaxBotsPerMatch() {
+        return 2 * BotSetup.MAX_TEAM_SIZE - 1;
+    }
+
+    /**
+     * Limits the host applies; providers usually read them from their own config.
+     * @return The ticks a match may take to start, 20-1200
+     */
+    default int getStartTimeoutTicks() {
+        return 200;
+    }
+
+    /**
+     * Limits the host applies; providers usually read them from their own config.
+     * @return The longest live match in seconds before it ends as a timeout, 30-3600
+     */
+    default int getMaxMatchDurationSeconds() {
+        return 600;
+    }
+
 }
