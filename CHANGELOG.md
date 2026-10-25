@@ -3,6 +3,23 @@
 All notable changes to the ZonePracticePro API.
 
 
+## 2.8.0 - 2026-10-25
+
+### ✨ New Features
+- **api:** Add bot provider registry ([`b5fe86d`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/b5fe86d5303ee8789e2b03ea9cbf475417a6a343))
+- **api:** Tick bots during the start countdown ([`30865b1`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/30865b1c1eec0fdf4932de8a9f9c0b00fc9c90cd))
+- **api:** Let bot providers decide kit support ([`f939077`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/f9390778a9a734e7dec171992296572e3ea6741e))
+- **api:** Per-bot fight view with enemies, allies and team size ([`e9147ff`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/e9147ff112137b87b4fa2ba13780fc97f475cbc6))
+- **bot:** Add BotOpponent.idle for round end physics ([`499c5ce`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/499c5ce2b28ae698583065fd33a061e64ee12f42))
+- **bot:** Add BotMatchEndEvent with outcome and round counts ([`abf53c7`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/abf53c770a5a0e2d51f6936ee1fbe232358c0c90))
+- **bot:** Let bot providers supply match and bot limits ([`7dfafd6`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/7dfafd61f110e76f5764829ad13a7d9d9e86bf9c))
+
+### 📖 Documentation
+- **api:** Describe bot setup feedback and the rematch command ([`4490cae`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/4490cae123539db3984e67284c22525e08645763))
+
+### 🔧 Build
+- Move the API to Java 25 and paper-api 1.21.11 ([`e744912`](https://github.com/ZoneDevelopement/ZonePracticePro-Api/commit/e74491277048c71fdce4f3a1395ccef95ab86cc7))
+
 ## 2.7.0 - 2026-10-16
 
 ### ✨ New Features
